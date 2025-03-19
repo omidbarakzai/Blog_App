@@ -5,8 +5,19 @@ export async function createCommentApi(data, options = {}) {
 }
 
 export async function getAllCommentsApi(options = {}) {
-  // await new Promise((resolve) => setTimeout(() => resolve(), 3000));
-  return http.get(`/comment/list`, options).then(({ data }) => data.data);
+  try {
+    const response = await http.get(`/comment/list`, options);
+
+    // بررسی اینکه مقدار response و data معتبر باشد
+    if (!response || !response.data || !response.data.data) {
+      throw new Error("Invalid response structure");
+    }
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    return []; // مقدار پیش‌فرض برای جلوگیری از خطا در جاهای دیگر
+  }
 }
 
 export async function deleteCommentApi(id, options = {}) {
