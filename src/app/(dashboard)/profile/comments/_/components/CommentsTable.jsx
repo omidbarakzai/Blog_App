@@ -6,8 +6,9 @@ import { Fragment } from "react";
 
 async function CommentsTable() {
   const { comments, commentsCount } = await getAllCommentsApi();
-  if (!comments.length) return <Empty resourceName="نظری" />;
-
+  if (!comments || !Array.isArray(comments) || comments.length === 0) {
+    return <Empty resourceName="نظری" />;
+  }
   let iterator = 0;
 
   return (
